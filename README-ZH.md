@@ -23,6 +23,8 @@
 
 - [平台支持](#%E5%B9%B3%E5%8F%B0%E6%94%AF%E6%8C%81)
 - [截图](#%E6%88%AA%E5%9B%BE)
+  - [菜单项图标（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%9B%BE%E6%A0%87macos)
+  - [菜单项快捷键（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%BF%AB%E6%8D%B7%E9%94%AEmacos)
 - [已知问题](#%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98)
   - [与 app_links 不兼容](#%E4%B8%8E-app_links-%E4%B8%8D%E5%85%BC%E5%AE%B9)
   - [在 GNOME 中不显示](#%E5%9C%A8-gnome-%E4%B8%AD%E4%B8%8D%E6%98%BE%E7%A4%BA)
@@ -34,6 +36,8 @@
 - [谁在用使用它？](#%E8%B0%81%E5%9C%A8%E7%94%A8%E4%BD%BF%E7%94%A8%E5%AE%83)
 - [API](#api)
   - [TrayManager](#traymanager)
+- [菜单项图标（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%9B%BE%E6%A0%87macos-1)
+- [菜单项快捷键（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%BF%AB%E6%8D%B7%E9%94%AEmacos-1)
 - [许可证](#%E8%AE%B8%E5%8F%AF%E8%AF%81)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -56,6 +60,29 @@
 
 ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon.png?raw=true)
 ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon1.png?raw=true)
+
+### 菜单项快捷键（macOS）
+
+使用 `TrayMenuItem.shortcut` 渲染右侧对齐（浅灰色）的快捷键列：
+
+```dart
+import 'package:tray_manager/tray_manager.dart';
+
+final menu = Menu(
+  items: [
+    TrayMenuItem(
+      key: 'assistant',
+      label: 'Assistant',
+      shortcut: '⌘⇧Space',
+      icon: 'images/tray_icon.png',
+    ),
+  ],
+);
+
+await trayManager.setContextMenu(menu);
+```
+
+![MenuItem shortcut on macOS](./screenshots/shortcut.png)
 
 ## 已知问题
 
@@ -243,8 +270,31 @@ await trayManager.setContextMenu(menu);
 ```
 
 说明：
+
 - 插件会优先从 Flutter assets 加载图标，并以 base64 形式传给原生侧。
 - 如果 assets 加载失败，会回退把 `icon` 当作绝对文件路径来尝试加载（best-effort）。
+- 其他平台目前可能会忽略该字段。
+
+## 菜单项快捷键（macOS）
+
+`TrayMenuItem` 提供了 `shortcut` 字段。在 **macOS** 上该字段会被转换为原生 `NSMenuItem.keyEquivalent` 进行渲染，因此会显示为**右侧对齐、浅灰色**的系统快捷键列：
+
+```dart
+Menu menu = Menu(
+  items: [
+    TrayMenuItem(
+      key: 'assistant',
+      label: 'Assistant',
+      shortcut: '⌘⇧Space',
+    ),
+  ],
+);
+await trayManager.setContextMenu(menu);
+```
+
+说明：
+
+- macOS 会按系统规则标准化显示修饰键顺序（例如 `⇧⌘ Space`），不保证与输入字符串顺序一致。
 - 其他平台目前可能会忽略该字段。
 
 ## 许可证

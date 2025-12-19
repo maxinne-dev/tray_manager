@@ -1,7 +1,6 @@
 > **⚠️ Migration Notice**: This plugin is being migrated to [libnativeapi/nativeapi-flutter](https://github.com/libnativeapi/nativeapi-flutter)
 >
 > The new version is based on a unified C++ core library ([libnativeapi/nativeapi](https://github.com/libnativeapi/nativeapi)), providing more complete and consistent cross-platform native API support.
-r
 
 [![pub version][pub-image]][pub-url] [![][discord-image]][discord-url] ![][visits-count-image]
 
@@ -22,6 +21,8 @@ English | [简体中文](./README-ZH.md)
 
 - [Platform Support](#platform-support)
 - [Screenshots](#screenshots)
+  - [MenuItem icon (macOS)](#menuitem-icon-macos)
+  - [MenuItem shortcut (macOS)](#menuitem-shortcut-macos)
 - [Known Issues](#known-issues)
   - [Not Working with app_links](#not-working-with-app_links)
   - [Not Showing in GNOME](#not-showing-in-gnome)
@@ -33,6 +34,8 @@ English | [简体中文](./README-ZH.md)
 - [Who's using it?](#whos-using-it)
 - [API](#api)
   - [TrayManager](#traymanager)
+- [MenuItem icon (macOS)](#menuitem-icon-macos-1)
+- [MenuItem shortcut (macOS)](#menuitem-shortcut-macos-1)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -55,6 +58,29 @@ Menu item icons rendered via `MenuItem.icon`:
 
 ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon.png?raw=true)
 ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon1.png?raw=true)
+
+### MenuItem shortcut (macOS)
+
+Render a right-aligned (light gray) shortcut column using `TrayMenuItem.shortcut`:
+
+```dart
+import 'package:tray_manager/tray_manager.dart';
+
+final menu = Menu(
+  items: [
+    TrayMenuItem(
+      key: 'assistant',
+      label: 'Assistant',
+      shortcut: '⌘⇧Space',
+      icon: 'images/tray_icon.png',
+    ),
+  ],
+);
+
+await trayManager.setContextMenu(menu);
+```
+
+![MenuItem shortcut on macOS](./screenshots/shortcut.png)
 
 ## Known Issues
 
@@ -244,8 +270,30 @@ await trayManager.setContextMenu(menu);
 ```
 
 Notes:
+
 - The plugin will try to load the icon from Flutter assets and pass it to native code as base64.
 - If the icon asset can't be loaded, it will fall back to treating `icon` as an absolute file path (best-effort).
+- Other platforms may ignore this field for now.
+
+## MenuItem shortcut (macOS)
+
+`TrayMenuItem` provides a `shortcut` field. On **macOS** this is converted into native `NSMenuItem.keyEquivalent` rendering, so it appears as a **right-aligned, light gray** shortcut column:
+
+```dart
+final menu = Menu(
+  items: [
+    TrayMenuItem(
+      key: 'assistant',
+      label: 'Assistant',
+      shortcut: '⌘⇧Space',
+    ),
+  ],
+);
+await trayManager.setContextMenu(menu);
+```
+
+Notes:
+- macOS will standardize modifier display order (e.g. `⇧⌘ Space`), so the visual order may differ from the input string.
 - Other platforms may ignore this field for now.
 
 ## License

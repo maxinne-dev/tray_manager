@@ -150,6 +150,13 @@ class _HomePageState extends State<HomePage> with TrayListener {
           onTap: () async {
             _menu ??= Menu(
               items: [
+                if (Platform.isMacOS)
+                  TrayMenuItem(
+                    label: 'Shortcut',
+                    // macOS only: renders as a right-aligned, light-gray shortcut column.
+                    shortcut: '⌘⇧Space',
+                    icon: 'images/tray_icon.png',
+                  ),
                 MenuItem(
                   label: 'Look Up "LeanFlutter"',
                   icon: 'images/tray_icon.png',

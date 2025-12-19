@@ -222,7 +222,8 @@ class TrayManager {
 
       final submenu = item.submenu;
       if (submenu != null) {
-        m['submenu'] = await _menuToJsonWithBase64Icons(submenu, iconBase64Cache);
+        m['submenu'] =
+            await _menuToJsonWithBase64Icons(submenu, iconBase64Cache);
       }
 
       jsonItems.add(m);
