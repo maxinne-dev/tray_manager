@@ -33,7 +33,6 @@ English | [简体中文](./README-ZH.md)
 - [Who's using it?](#whos-using-it)
 - [API](#api)
   - [TrayManager](#traymanager)
-- [MenuItem icon (macOS)](#menuitem-icon-macos)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -54,8 +53,8 @@ English | [简体中文](./README-ZH.md)
 
 Menu item icons rendered via `MenuItem.icon`:
 
-![](../../screenshots/macos_icon.png)
-![](../../screenshots/macos_icon1.png)
+![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon.png?raw=true)
+![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon1.png?raw=true)
 
 ## Known Issues
 

@@ -34,7 +34,6 @@
 - [谁在用使用它？](#%E8%B0%81%E5%9C%A8%E7%94%A8%E4%BD%BF%E7%94%A8%E5%AE%83)
 - [API](#api)
   - [TrayManager](#traymanager)
-- [菜单项图标（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%9B%BE%E6%A0%87macos)
 - [许可证](#%E8%AE%B8%E5%8F%AF%E8%AF%81)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -55,8 +54,8 @@
 
 通过 `MenuItem.icon` 渲染的菜单项图标：
 
-![](../../screenshots/macos_icon.png)
-![](../../screenshots/macos_icon1.png)
+![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon.png?raw=true)
+![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos_icon1.png?raw=true)
 
 ## 已知问题
 

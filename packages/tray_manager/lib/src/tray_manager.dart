@@ -189,10 +189,13 @@ class TrayManager {
     if (defaultTargetPlatform != TargetPlatform.macOS) {
       return menu.toJson();
     }
-    return _menuToJsonWithBase64Icons(menu);
+    return _menuToJsonWithBase64Icons(menu, <String, String>{});
   }
 
-  Future<Map<String, dynamic>> _menuToJsonWithBase64Icons(Menu menu) async {
+  Future<Map<String, dynamic>> _menuToJsonWithBase64Icons(
+    Menu menu,
+    Map<String, String> iconBase64Cache,
+  ) async {
     final items = menu.items ?? const <MenuItem>[];
     final jsonItems = <Map<String, dynamic>>[];
 
@@ -201,19 +204,25 @@ class TrayManager {
 
       final iconPath = item.icon;
       if (iconPath != null && iconPath.isNotEmpty) {
-        try {
-          final data = await rootBundle.load(iconPath);
-          final base64Icon = base64Encode(data.buffer.asUint8List());
-          m['base64Icon'] = base64Icon;
-        } catch (_) {
-          // Best-effort: if icon isn't a bundled asset or can't be loaded,
-          // leave it as-is (platform side may still support file paths).
+        final cached = iconBase64Cache[iconPath];
+        if (cached != null) {
+          m['base64Icon'] = cached;
+        } else {
+          try {
+            final data = await rootBundle.load(iconPath);
+            final base64Icon = base64Encode(data.buffer.asUint8List());
+            iconBase64Cache[iconPath] = base64Icon;
+            m['base64Icon'] = base64Icon;
+          } catch (_) {
+            // Best-effort: if icon isn't a bundled asset or can't be loaded,
+            // leave it as-is (platform side may still support file paths).
+          }
         }
       }
 
       final submenu = item.submenu;
       if (submenu != null) {
-        m['submenu'] = await _menuToJsonWithBase64Icons(submenu);
+        m['submenu'] = await _menuToJsonWithBase64Icons(submenu, iconBase64Cache);
       }
 
       jsonItems.add(m);
