@@ -33,6 +33,7 @@ English | [简体中文](./README-ZH.md)
 - [Who's using it?](#whos-using-it)
 - [API](#api)
   - [TrayManager](#traymanager)
+- [MenuItem icon (macOS)](#menuitem-icon-macos)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -48,6 +49,13 @@ English | [简体中文](./README-ZH.md)
 | macOS                                                                                     | Linux                                                                                     | Windows                                                                                          |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos.png?raw=true) | ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/linux.png?raw=true) | ![image](https://github.com/leanflutter/tray_manager/blob/main/screenshots/windows.png?raw=true) |
+
+### MenuItem icon (macOS)
+
+Menu item icons rendered via `MenuItem.icon`:
+
+![](../../screenshots/macos_icon.png)
+![](../../screenshots/macos_icon1.png)
 
 ## Known Issues
 
@@ -124,11 +132,13 @@ Menu menu = Menu(
     MenuItem(
       key: 'show_window',
       label: 'Show Window',
+      icon: 'images/tray_icon.png',
     ),
     MenuItem.separator(),
     MenuItem(
       key: 'exit_app',
       label: 'Exit App',
+      icon: 'images/tray_icon.png',
     ),
   ],
 );
@@ -216,6 +226,28 @@ class _HomePageState extends State<HomePage> with TrayListener {
 | setContextMenu   | Sets the context menu for this icon.           | ✔️    | ✔️    | ✔️      |
 | popUpContextMenu | Pops up the context menu of the tray icon.     | ➖    | ✔️    | ✔️      |
 | getBounds        | Returns `Rect` The bounds of this tray icon.   | ➖    | ✔️    | ✔️      |
+
+## MenuItem icon (macOS)
+
+`MenuItem` has an `icon` field (from `menu_base`). On **macOS**, per-menu-item icons are supported when you provide an asset path:
+
+```dart
+Menu menu = Menu(
+  items: [
+    MenuItem(
+      key: 'show_window',
+      label: 'Show Window',
+      icon: 'images/tray_icon.png',
+    ),
+  ],
+);
+await trayManager.setContextMenu(menu);
+```
+
+Notes:
+- The plugin will try to load the icon from Flutter assets and pass it to native code as base64.
+- If the icon asset can't be loaded, it will fall back to treating `icon` as an absolute file path (best-effort).
+- Other platforms may ignore this field for now.
 
 ## License
 

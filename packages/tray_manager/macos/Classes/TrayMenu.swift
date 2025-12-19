@@ -10,6 +10,26 @@ import AppKit
 public class TrayMenu: NSMenu, NSMenuDelegate {
     public var onMenuItemClick:((NSMenuItem) -> Void)?
     
+    private static let menuIconSize = NSSize(width: 16, height: 16)
+    
+    private static func loadMenuItemImage(from itemDict: [String: Any]) -> NSImage? {
+        if let base64Icon = itemDict["base64Icon"] as? String,
+           let data = Data(base64Encoded: base64Icon),
+           let image = NSImage(data: data) {
+            image.size = menuIconSize
+            return image
+        }
+        // Fallback: treat `icon` as an absolute file path if provided.
+        if let iconPath = itemDict["icon"] as? String,
+           !iconPath.isEmpty,
+           FileManager.default.fileExists(atPath: iconPath),
+           let image = NSImage(contentsOfFile: iconPath) {
+            image.size = menuIconSize
+            return image
+        }
+        return nil
+    }
+    
     public override init(title: String) {
         super.init(title: title)
     }
@@ -42,6 +62,9 @@ public class TrayMenu: NSMenu, NSMenuDelegate {
             menuItem.tag = id
             menuItem.title = label
             menuItem.toolTip = toolTip
+            if let image = TrayMenu.loadMenuItemImage(from: itemDict) {
+                menuItem.image = image
+            }
             menuItem.isEnabled = !disabled
             menuItem.action = !disabled ? #selector(statusItemMenuButtonClicked) : nil
             menuItem.target = self

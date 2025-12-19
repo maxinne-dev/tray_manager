@@ -180,9 +180,48 @@ class TrayManager {
   Future<void> setContextMenu(Menu menu) async {
     _menu = menu;
     final Map<String, dynamic> arguments = {
-      'menu': menu.toJson(),
+      'menu': await _menuToJsonForPlatform(menu),
     };
     await _channel.invokeMethod('setContextMenu', arguments);
+  }
+
+  Future<Map<String, dynamic>> _menuToJsonForPlatform(Menu menu) async {
+    if (defaultTargetPlatform != TargetPlatform.macOS) {
+      return menu.toJson();
+    }
+    return _menuToJsonWithBase64Icons(menu);
+  }
+
+  Future<Map<String, dynamic>> _menuToJsonWithBase64Icons(Menu menu) async {
+    final items = menu.items ?? const <MenuItem>[];
+    final jsonItems = <Map<String, dynamic>>[];
+
+    for (final item in items) {
+      final m = Map<String, dynamic>.from(item.toJson());
+
+      final iconPath = item.icon;
+      if (iconPath != null && iconPath.isNotEmpty) {
+        try {
+          final data = await rootBundle.load(iconPath);
+          final base64Icon = base64Encode(data.buffer.asUint8List());
+          m['base64Icon'] = base64Icon;
+        } catch (_) {
+          // Best-effort: if icon isn't a bundled asset or can't be loaded,
+          // leave it as-is (platform side may still support file paths).
+        }
+      }
+
+      final submenu = item.submenu;
+      if (submenu != null) {
+        m['submenu'] = await _menuToJsonWithBase64Icons(submenu);
+      }
+
+      jsonItems.add(m);
+    }
+
+    return <String, dynamic>{
+      'items': jsonItems,
+    }..removeWhere((key, value) => value == null);
   }
 
   /// Pops up the context menu of the tray icon.

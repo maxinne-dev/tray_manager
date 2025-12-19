@@ -34,6 +34,7 @@
 - [谁在用使用它？](#%E8%B0%81%E5%9C%A8%E7%94%A8%E4%BD%BF%E7%94%A8%E5%AE%83)
 - [API](#api)
   - [TrayManager](#traymanager)
+- [菜单项图标（macOS）](#%E8%8F%9C%E5%8D%95%E9%A1%B9%E5%9B%BE%E6%A0%87macos)
 - [许可证](#%E8%AE%B8%E5%8F%AF%E8%AF%81)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -49,6 +50,13 @@
 | macOS                                                                                     | Linux                                                                                     | Windows                                                                                          |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
 | ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/macos.png?raw=true) | ![](https://github.com/leanflutter/tray_manager/blob/main/screenshots/linux.png?raw=true) | ![image](https://github.com/leanflutter/tray_manager/blob/main/screenshots/windows.png?raw=true) |
+
+### 菜单项图标（macOS）
+
+通过 `MenuItem.icon` 渲染的菜单项图标：
+
+![](../../screenshots/macos_icon.png)
+![](../../screenshots/macos_icon1.png)
 
 ## 已知问题
 
@@ -217,6 +225,28 @@ class _HomePageState extends State<HomePage> with TrayListener {
 | setContextMenu   | 设置此图标的上下文菜单。         | ✔️    | ✔️    | ✔️      |
 | popUpContextMenu | 弹出托盘图标的上下文菜单。       | ➖    | ✔️    | ✔️      |
 | getBounds        | 返回 `Rect` 这个托盘图标的边界。 | ➖    | ✔️    | ✔️      |
+
+## 菜单项图标（macOS）
+
+`MenuItem`（来自 `menu_base`）带有 `icon` 字段。在 **macOS** 上，如果你传入 Flutter assets 路径，就可以显示每个菜单项的图标：
+
+```dart
+Menu menu = Menu(
+  items: [
+    MenuItem(
+      key: 'show_window',
+      label: 'Show Window',
+      icon: 'images/tray_icon.png',
+    ),
+  ],
+);
+await trayManager.setContextMenu(menu);
+```
+
+说明：
+- 插件会优先从 Flutter assets 加载图标，并以 base64 形式传给原生侧。
+- 如果 assets 加载失败，会回退把 `icon` 当作绝对文件路径来尝试加载（best-effort）。
+- 其他平台目前可能会忽略该字段。
 
 ## 许可证
 

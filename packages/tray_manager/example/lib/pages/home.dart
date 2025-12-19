@@ -152,28 +152,35 @@ class _HomePageState extends State<HomePage> with TrayListener {
               items: [
                 MenuItem(
                   label: 'Look Up "LeanFlutter"',
+                  icon: 'images/tray_icon.png',
                 ),
                 MenuItem(
                   label: 'Search with Google',
+                  icon: 'images/tray_icon.png',
                 ),
                 MenuItem.separator(),
                 MenuItem(
                   label: 'Cut',
+                  icon: 'images/tray_icon.png',
                 ),
                 MenuItem(
                   label: 'Copy',
+                  icon: 'images/tray_icon.png',
                 ),
                 MenuItem(
                   label: 'Paste',
                   disabled: true,
+                  icon: 'images/tray_icon.png',
                 ),
                 MenuItem.submenu(
                   label: 'Share',
+                  icon: 'images/tray_icon.png',
                   submenu: Menu(
                     items: [
                       MenuItem.checkbox(
                         label: 'Item 1',
                         checked: true,
+                        icon: 'images/tray_icon.png',
                         onClick: (menuItem) {
                           if (kDebugMode) {
                             print('click item 1');
@@ -184,6 +191,7 @@ class _HomePageState extends State<HomePage> with TrayListener {
                       MenuItem.checkbox(
                         label: 'Item 2',
                         checked: false,
+                        icon: 'images/tray_icon.png',
                         onClick: (menuItem) {
                           if (kDebugMode) {
                             print('click item 2');
