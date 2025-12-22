@@ -361,6 +361,11 @@ void TrayManagerPlugin::PopUpContextMenu(
   }
   TrackPopupMenu(hMenu, TPM_BOTTOMALIGN | TPM_LEFTALIGN, static_cast<int>(x),
                  static_cast<int>(y), 0, hWnd, NULL);
+  // IMPORTANT: Post a benign message to the window to work around a Windows bug.
+  // Without this, the menu won't close when clicking outside of it.
+  // This is documented in the official TrackPopupMenu API documentation.
+  // See: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu
+  PostMessage(hWnd, WM_NULL, 0, 0);
   result->Success(flutter::EncodableValue(true));
 }
 
