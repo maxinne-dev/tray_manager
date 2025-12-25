@@ -5,3 +5,8 @@
 *.iml
 pubspec_overrides.yaml
 pubspec.lock
+
+# Generated Flutter files
+generated_plugin_registrant.*
+GeneratedPluginRegistrant.swift
+generated_plugins.cmake
