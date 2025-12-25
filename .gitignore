@@ -1,9 +1,9 @@
 .dart_tool/
 .idea/
 .vscode/
-packages/tray_manager/example/linux/flutter/
-packages/tray_manager/example/macos/Flutter/
-packages/tray_manager/example/windows/flutter/
+packages/tray_manager/example/linux/flutter/*
+packages/tray_manager/example/macos/Flutter/*
+packages/tray_manager/example/windows/flutter/*
 
 *.iml
 pubspec_overrides.yaml
